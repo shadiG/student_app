@@ -1,0 +1,1004 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Student APP API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/v1/classrooms": {
+            "get": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "List all classrooms",
+                "operationId": "df0e644fedc1687db78ae8f72d732531",
+                "parameters": [
+                    {
+                        "name": "includeStudents",
+                        "in": "query",
+                        "description": "Whether to include the students in each classroom",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeDegrees",
+                        "in": "query",
+                        "description": "Whether to include the degree of each classroom",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of classrooms",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ClassroomResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "Create a new classroom",
+                "operationId": "feec68582ef509f7e15c310e562b0da4",
+                "requestBody": {
+                    "description": "Classroom data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "degree_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "degree_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The created classroom",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassroomResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/classrooms/{classroom}": {
+            "get": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "Retrieve a single classroom",
+                "operationId": "1fd876f7e99c789ba4f62f574def8f52",
+                "parameters": [
+                    {
+                        "name": "classroom",
+                        "in": "path",
+                        "description": "ID of the classroom to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "includeStudents",
+                        "in": "query",
+                        "description": "Whether to include the students in the classroom",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeDegree",
+                        "in": "query",
+                        "description": "Whether to include the degree for the classroom",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested classroom",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassroomResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Classroom not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/classrooms/{id}": {
+            "put": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "Update a classroom with PUT request",
+                "operationId": "bdfa65d5f705165d93e6edf03f79be72",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the classroom to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Classroom data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "degree_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Classroom updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassroomResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Classroom not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "Delete a classroom",
+                "operationId": "4df6cb056d8f3fd47eddc0d102b4c25a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the classroom to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "forceDelete",
+                        "in": "query",
+                        "description": "Whether to force delete the classroom and its related records",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Classroom deleted successfully"
+                    },
+                    "404": {
+                        "description": "Classroom not found"
+                    },
+                    "422": {
+                        "description": "Cannot delete classroom with attached students"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Classrooms"
+                ],
+                "summary": "Update a classroom with PATCH request",
+                "operationId": "41a34f9dc3e1de9e52cf7f690b6893ec",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the classroom to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Classroom data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "degree_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Classroom updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassroomResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Classroom not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/degrees": {
+            "get": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "List all degrees",
+                "operationId": "050024f82119ab993e0af92190097ae0",
+                "parameters": [
+                    {
+                        "name": "includeClassrooms",
+                        "in": "query",
+                        "description": "Whether to include the classrooms of each degree",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeStudents",
+                        "in": "query",
+                        "description": "Whether to include the students in each classroom",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of degrees",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DegreeResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "Create a new degree",
+                "operationId": "7362f1deba7f3f9fd4312d346b58dfc5",
+                "requestBody": {
+                    "description": "Degree data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "max_year"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "max_year": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The created degree",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DegreeResource"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "api/v1/degrees/{degree}": {
+            "get": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "Retrieve a single degree",
+                "operationId": "da3ab9214624c025c3c084ffcf049832",
+                "parameters": [
+                    {
+                        "name": "degree",
+                        "in": "path",
+                        "description": "ID of the degree to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "includeClassrooms",
+                        "in": "query",
+                        "description": "Whether to include the classroom for the degree",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeStudents",
+                        "in": "query",
+                        "description": "Whether to include the students in the classroom of the degree",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The requested degree",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DegreeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Degree not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/degrees/{id}": {
+            "put": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "Update a degree with PUT request",
+                "operationId": "4bc65057c0643c9aaa2f2751155c2fe2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the degree to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Degree data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "max_year"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "max_year": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Degree updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DegreeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Degree not found"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "Delete a degree",
+                "operationId": "efd90cd652649bebbf237e85b8d0a14b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the degree to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "forceDelete",
+                        "in": "query",
+                        "description": "Whether to force delete the degree and its related records",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Degree deleted successfully"
+                    },
+                    "404": {
+                        "description": "Degree not found"
+                    },
+                    "422": {
+                        "description": "Cannot delete degree with attached classrooms"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Degrees"
+                ],
+                "summary": "Update a degree with PATCH request",
+                "operationId": "e5a04cc80922644bf9fa56b9c6b3d1cc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the degree to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Degree data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "max_year": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Degree updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DegreeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Degree not found"
+                    }
+                }
+            }
+        },
+        "/api/v1/students": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Get a list of all students",
+                "operationId": "4b649fd3816820e7d6ece134d72a7f52",
+                "parameters": [
+                    {
+                        "name": "includeClassroom",
+                        "in": "query",
+                        "description": "Include the classroom relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeDegree",
+                        "in": "query",
+                        "description": "Include the degree relationship",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/StudentResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Create a new student",
+                "operationId": "20b07e0eabfb966bf0029eef43b01b6e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "classroom_id",
+                                    "first_name",
+                                    "last_name",
+                                    "email",
+                                    "gender"
+                                ],
+                                "properties": {
+                                    "classroom_id": {
+                                        "description": "The ID of the classroom the student belongs to",
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "first_name": {
+                                        "description": "The first name of the student",
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "The last name of the student",
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "email": {
+                                        "description": "The email address of the student",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "gender": {
+                                        "description": "The gender of the student",
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "The date of birth of the student (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2004-12-31"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Student created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Student created successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/StudentResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid"
+                                        },
+                                        "errors": {
+                                            "$ref": "#/components/schemas/StoreStudentRequest"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/students/{id}": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Get a student by ID",
+                "description": "Returns a single student resource",
+                "operationId": "e3b040f32e8b7cf9191fd7f31ed2f9eb",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the student to return",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "includeClassroom",
+                        "in": "query",
+                        "description": "Include the classroom related to the student",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": "false"
+                        }
+                    },
+                    {
+                        "name": "includeDegree",
+                        "in": "query",
+                        "description": "Include the degree related to the classroom",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": "false"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/StudentResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Update a student resource by ID using PUT",
+                "description": "Update a student resource by ID using PUT",
+                "operationId": "updateStudentByIdPut",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the student to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "classroom_id": {
+                                        "description": "ID of the classroom to which the student belongs",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "first_name": {
+                                        "description": "First name of the student",
+                                        "type": "string",
+                                        "example": "John"
+                                    },
+                                    "last_name": {
+                                        "description": "Last name of the student",
+                                        "type": "string",
+                                        "example": "Doe"
+                                    },
+                                    "email": {
+                                        "description": "Email of the student",
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "gender": {
+                                        "description": "Gender of the student (male or female)",
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ],
+                                        "example": "male"
+                                    },
+                                    "date_of_birth": {
+                                        "description": "Date of birth of the student (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/StudentResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "Error message",
+                                            "type": "string",
+                                            "example": "Student not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Delete existing student",
+                "description": "Deletes a single student based on the ID passed in the path",
+                "operationId": "deleteStudent",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of student to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Successful operation, no content returned"
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Update a student resource by ID using PATCH",
+                "description": "Update a student resource by ID using PATCH",
+                "operationId": "updateStudentByIdPatch",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the student to update",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Updated student object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "classroom_id": {
+                                        "description": "ID of the classroom the student belongs to",
+                                        "type": "integer"
+                                    },
+                                    "first_name": {
+                                        "description": "First name of the student",
+                                        "type": "string"
+                                    },
+                                    "last_name": {
+                                        "description": "Last name of the student",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email of the student",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "johndoe@example.com"
+                                    },
+                                    "gender": {
+                                        "description": "Gender of the student",
+                                        "type": "string",
+                                        "enum": [
+                                            "male",
+                                            "female"
+                                        ]
+                                    },
+                                    "date_of_birth": {
+                                        "description": "Date of birth of the student (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2000-01-01"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Student updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/components/schemas/StudentResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Student not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "StoreStudentRequest": {},
+            "ClassroomResource": {},
+            "DegreeCollection": {},
+            "DegreeResource": {},
+            "StudentResource": {}
+        }
+    }
+}
